@@ -1,12 +1,13 @@
 import App from "../components/App";
 import Header from "../components/Header";
-import AllPositions from "../components/AllPositions";
-import Login from "../components/Login";
+import Todos from "../components/Todos";
+// import Login from "../components/Login";
+import Submit from "../components/Submit";
 
 export default () => (
   <App>
     <Header />
-    <AllPositions />
-    <Login />
+    <Submit />
+    <Todos />
   </App>
 );

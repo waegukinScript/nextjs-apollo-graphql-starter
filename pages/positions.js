@@ -2,7 +2,7 @@ import App from "../components/App";
 import Header from "../components/Header";
 import React, { Component } from "react";
 import Submit from "../components/Submit";
-import PostList from "../components/AllPositions";
+import TodoList from "../components/Todos";
 
 export default class Positions extends Component {
   state = {};
@@ -19,7 +19,7 @@ export default class Positions extends Component {
             <Submit />
           </div>
           <div>
-            <PostList />
+            <TodoList />
           </div>
         </div>
         <style jsx>{`

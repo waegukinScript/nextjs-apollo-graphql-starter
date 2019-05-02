@@ -1,6 +1,6 @@
 const bcrypt = require("bcryptjs");
 const User = require("../models/user");
-const Position = require("../models/position");
+const Todo = require("../models/todo");
 const validator = require("validator");
 
 module.exports = {
@@ -37,11 +37,11 @@ module.exports = {
     const createdUser = await user.save();
     return { ...createdUser._doc, _id: createdUser._id.toString() };
   },
-  createPosition: async function({ userInput }, req) {
+  createTodo: async function({ userInput }, req) {
     const errors = [];
     if (
-      validator.isEmpty(userInput.position) ||
-      !validator.isLength(userInput.position, { min: 5 })
+      validator.isEmpty(userInput.todo) ||
+      !validator.isLength(userInput.todo, { min: 4 })
     ) {
       errors.push({ message: "input is too short!" });
     }
@@ -52,23 +52,27 @@ module.exports = {
       error.code = 422;
       throw error;
     }
-    const existingPosition = await Position.findOne({
-      position: userInput.position
+    const existingTodo = await Todo.findOne({
+      todo: userInput.todo
     });
-    if (existingPosition) {
-      const error = new Error("Position exists already!");
+    if (existingTodo) {
+      const error = new Error("Todo exists already!");
       throw error;
     }
-    const position = new Position({
-      position: userInput.position
+    const todo = new Todo({
+      todo: userInput.todo
     });
-    const createdPosition = await position.save();
-    return { ...createdPosition._doc, _id: createdPosition._id.toString() };
+    const createdTodo = await todo.save();
+    // return createdTodo.toObject();
+    return { ...createdTodo._doc, _id: createdTodo._id.toString() };
+  },
+  deleteTodo: async function({ _id }, req) {
+    return await Todo.deleteOne({ _id });
   },
   hello() {
     return "Hello World!";
   },
-  positions() {
-    return Position.find();
+  todos() {
+    return Todo.find();
   }
 };

@@ -1,126 +1,60 @@
-// import { ApolloConsumer } from "react-apollo";
+import { ApolloConsumer } from "react-apollo";
 import gql from "graphql-tag";
-import { allPositionsQuery } from "./AllPositions";
+import { allTodosQuery } from "./Todos";
 import { graphql } from "react-apollo";
 
-// export default function Submit() {
-//   return (
-//     <ApolloConsumer>
-//       {client => (
-//         <form onSubmit={event => handleSubmit(event, client)}>
-//           <h1>Submit</h1>
-//           <input placeholder="position" name="position" type="text" required />
-//           <button type="submit">Submit</button>
-//           <style jsx>{`
-//             form {
-//               border-bottom: 1px solid #ececec;
-//               padding-bottom: 20px;
-//               margin-bottom: 20px;
-//             }
-//             h1 {
-//               font-size: 20px;
-//             }
-//             input {
-//               display: block;
-//               margin-bottom: 10px;
-//             }
-//           `}</style>
-//         </form>
-//       )}
-//     </ApolloConsumer>
-//   );
-// }
-
-const Submit = ({ createPosition }) => {
-  handleSubmit = e => {
-    e.preventDefault();
-    const form = e.target;
-    const formData = new window.FormData(form);
-    createPosition(formData.get("position"));
-    form.reset();
-  };
+export default function Submit() {
   return (
-    <form onSubmit={e => this.handleSubmit(e)}>
-      <h1>Submit</h1>
-      <input placeholder="position" name="position" type="text" required />
-      <button type="submit">Submit</button>
-      <style jsx>{`
-        form {
-          border-bottom: 1px solid #ececec;
-          padding-bottom: 20px;
-          margin-bottom: 20px;
-        }
-        h1 {
-          font-size: 20px;
-        }
-        input {
-          display: block;
-          margin-bottom: 10px;
-        }
-      `}</style>
-    </form>
+    <ApolloConsumer>
+      {client => (
+        <form onSubmit={event => handleSubmit(event, client)}>
+          <h1 className="display-5 pb-3">Create New Task</h1>
+          <div className="form-group">
+            <input
+              className="form-control d-inline-block w-50 align-middle"
+              placeholder="add todo"
+              name="todo"
+              type="text"
+            />
+            <button className="btn btn-primary ml-4" type="submit">
+              Add Task
+            </button>
+          </div>
+        </form>
+      )}
+    </ApolloConsumer>
   );
-};
+}
 
-const createPosition = gql`
-  mutation createPosition($position: String!) {
-    createPosition(userInput: { position: $position }) {
-      _id
-      position
-    }
-  }
-`;
+function handleSubmit(event, client) {
+  event.preventDefault();
+  const form = event.target;
+  const formData = new window.FormData(form);
+  const todo = formData.get("todo");
+  console.log("user input from Submit.js ", todo);
+  form.reset();
 
-export default graphql(createPosition, {
-  props: ({ mutate }) => ({
-    createPost: position =>
-      mutate({
-        variables: { position },
-        update: (proxy, { data: { createPosition } }) => {
-          const data = proxy.readQuery({
-            query: allPositionsQuery
-          });
-          proxy.writeQuery({
-            query: allPositionsQuery,
-            data: {
-              ...data,
-              allPositionsQuery: [createPosition, ...data.positions]
-            }
-          });
+  client.mutate({
+    mutation: gql`
+      mutation createTodo($todo: String!) {
+        createTodo(userInput: { todo: $todo }) {
+          _id
+          todo
         }
-      })
-  })
-})(Submit);
-
-// function handleSubmit(event, client) {
-//   event.preventDefault();
-//   const form = event.target;
-//   const formData = new window.FormData(form);
-//   const position = formData.get("position");
-//   console.log("input ", position);
-//   form.reset();
-
-//   client.mutate({
-//     mutation: gql`
-//       mutation createPosition($position: String!) {
-//         createPosition(userInput: { position: $position }) {
-//           _id
-//           position
-//         }
-//       }
-//     `,
-//     variables: { position },
-//     update: (proxy, { data: { createPosition } }) => {
-//       const data = proxy.readQuery({
-//         query: allPositionsQuery
-//       });
-//       proxy.writeQuery({
-//         query: allPositionsQuery,
-//         data: {
-//           ...data,
-//           allPositionsQuery: [createPosition, ...data.positions]
-//         }
-//       });
-//     }
-//   });
-// }
+      }
+    `,
+    variables: { todo },
+    update: (proxy, { data: { createTodo } }) => {
+      const data = proxy.readQuery({
+        query: allTodosQuery
+      });
+      proxy.writeQuery({
+        query: allTodosQuery,
+        data: {
+          // ...data,
+          todos: [...data.todos, createTodo]
+        }
+      });
+    }
+  });
+}

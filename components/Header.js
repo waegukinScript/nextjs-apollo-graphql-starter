@@ -2,33 +2,29 @@ import Link from "next/link";
 import { withRouter } from "next/router";
 
 const Header = ({ router: { pathname } }) => (
-  <header>
-    <Link prefetch href="/">
-      <a className={pathname === "/" ? "is-active" : ""}>Home</a>
-    </Link>
-    <Link prefetch href="/about">
-      <a className={pathname === "/about" ? "is-active" : ""}>About</a>
-    </Link>
-    <Link prefetch href="/signup">
-      <a className={pathname === "/signup" ? "is-active" : ""}>Signup</a>
-    </Link>
-    <Link prefetch href="/positions">
-      <a className={pathname === "/positions" ? "is-active" : ""}>Positions</a>
-    </Link>
-    <style jsx>{`
-      header {
-        margin-bottom: 25px;
-      }
-      a {
-        font-size: 14px;
-        margin-right: 15px;
-        text-decoration: none;
-      }
-      .is-active {
-        text-decoration: underline;
-      }
-    `}</style>
-  </header>
+  <nav className="navbar navbar-light bg-light">
+    <div>
+      <Link prefetch href="/">
+        <a
+          className={`nav-link d-inline-block ${
+            pathname === "/" ? "is-active" : ""
+          }`}
+        >
+          Home
+        </a>
+      </Link>
+
+      <Link prefetch href="/about">
+        <a
+          className={`nav-link d-inline-block ${
+            pathname === "/" ? "is-active" : ""
+          }`}
+        >
+          About
+        </a>
+      </Link>
+    </div>
+  </nav>
 );
 
 export default withRouter(Header);

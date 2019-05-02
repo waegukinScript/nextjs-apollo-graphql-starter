@@ -1,11 +1,11 @@
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
 
-const Position = new Schema({
-  position: {
+const Todo = new Schema({
+  todo: {
     type: String,
     trim: true
   }
 });
 
-module.exports = mongoose.model("Position", Position);
+module.exports = mongoose.model("Todo", Todo);

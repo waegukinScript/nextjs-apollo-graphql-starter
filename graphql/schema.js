@@ -20,9 +20,13 @@ type User {
   posts: [Post!]!
 }
 
-type Position {
+type Todo {
   _id: ID!
-  position: String!
+  todo: String!
+}
+
+type DeletedTodo {
+  _id: ID!
 }
 
 input UserInputData {
@@ -31,18 +35,19 @@ input UserInputData {
   password: String!
 }
 
-input UserInputPosition {
-  position: String!
+input UserInputTodo {
+  todo: String!
 }
 
 type RootQuery {
   hello: String
-  positions: [Position!]!
+  todos: [Todo!]!
 }
 
 type RootMutation {
   createUser(userInput: UserInputData): User!
-  createPosition(userInput: UserInputPosition): Position!
+  createTodo(userInput: UserInputTodo): Todo!
+  deleteTodo(_id: ID!): Todo
 }
 
 schema {
