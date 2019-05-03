@@ -21,10 +21,9 @@ export const deleteTodoMutation = gql`
   }
 `;
 
-const updateCache = (cache, { data: deleteTodo }) => {
-  debugger;
+const updateCache = (cache, { data: { deleteTodo } }) => {
   const { todos } = cache.readQuery({ query: allTodosQuery });
-  console.log("deleteTodo ", deleteTodo);
+  console.log("deleteTodo ", deleteTodo._id);
   cache.writeQuery({
     query: allTodosQuery,
     data: {

@@ -63,11 +63,14 @@ module.exports = {
       todo: userInput.todo
     });
     const createdTodo = await todo.save();
-    // return createdTodo.toObject();
     return { ...createdTodo._doc, _id: createdTodo._id.toString() };
   },
   deleteTodo: async function({ _id }, req) {
-    return await Todo.deleteOne({ _id });
+    const deletedTodo = await Todo.findByIdAndDelete({ _id });
+    return {
+      _id: deletedTodo.id,
+      todo: deletedTodo.todo
+    };
   },
   hello() {
     return "Hello World!";
